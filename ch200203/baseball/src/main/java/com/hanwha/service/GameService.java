@@ -12,14 +12,14 @@ import java.util.List;
 import static com.hanwha.utils.ParseNumbers.parseNumbers;
 
 public class GameService {
-    private final InputView inputView = new InputView();
+    private final InputView inputView = InputView.getInstance();
 
     public void playGame(BaseballNumberGenerator generator) {
         GameResult gameResult;
         OutputView.welcomeMessage();
         // 1. 컴퓨터 난수 생성
         ComputerBaseballs computerBaseballs = ComputerBaseballs.generateComputerBaseballs(generator);
-        do {
+        while (true) {
             // 2. 유저 숫자 입력
             List<Integer> userInput = parseNumbers(inputView.inputNumbers());
             UserBaseballs userBaseballs = UserBaseballs.generateUserBaseballs(userInput);
@@ -31,9 +31,17 @@ public class GameService {
 
             // 치트~ (로컬에서 빠른 확인을 위해...)
             cheat(computerBaseballs);
-        } while (gameResult.isWrong());
+
+            if (gameResult.isWin()) {
+                break;
+            }
+        }
     }
 
+    /**
+     *
+     * @param computerBaseballs
+     */
     private void cheat(ComputerBaseballs computerBaseballs) {
         computerBaseballs.getBaseballs().getBaseballs().forEach(System.out::println);
     }

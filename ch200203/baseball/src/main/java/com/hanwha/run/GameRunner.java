@@ -15,15 +15,24 @@ public class GameRunner {
         BaseballNumberGenerator generator = new RandomBaseballNumberGenerator();
         GameService gameService = new GameService();
 
-        do {
+        while (true) {
+            // 1. 게임 플레이
             gameService.playGame(generator);
+
+            // 2. 게임 성공
             OutputView.gameSuccess();
-        } while (askToRestart());
+
+            // 3. 게임종료 || 재시작
+            if (askQuit()) {
+                break;
+            }
+        }
 
         OutputView.end();
+        System.exit(0);
     }
 
-    private boolean askToRestart() {
-        return inputView.inputCommand() == GameCommand.RESTART;
+    private boolean askQuit() {
+        return inputView.inputCommand() == GameCommand.QUIT;
     }
 }
